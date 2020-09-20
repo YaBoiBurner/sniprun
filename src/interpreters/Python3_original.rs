@@ -118,6 +118,7 @@ impl Interpreter for Python3_original {
 
         if self.get_current_level() >= SupportLevel::File {
             let mut code_to_add = String::new();
+            code_to_add.push_str("\n");
             let ranges = self.get_code_dependencies().unwrap_or(vec![]);
             let mut file = File::open(&self.data.filepath).unwrap();
             let mut contents = String::new();
@@ -129,16 +130,20 @@ impl Interpreter for Python3_original {
                         continue;
                     } else if i == range.start_row {
                         code_to_add.push_str(&line[range.start_col..]);
+                        code_to_add.push_str("\n");
                     } else if i == range.end_row {
                         code_to_add.push_str(&line[..range.end_col]);
+                        code_to_add.push_str("\n");
                     } else if i > range.end_row {
                         continue;
                     } else {
                         //is in the middle of the range
                         code_to_add.push_str(&line);
+                        code_to_add.push_str("\n");
                     }
                 }
             }
+            code_to_add.push_str("\n");
             self.code = code_to_add + &self.code;
         }
         Ok(())
@@ -159,6 +164,7 @@ exit_value1428571999 = str(mystdout1427851999.getvalue())";
         Ok(())
     }
     fn build(&mut self) -> Result<(), SniprunError> {
+        info!("python code:\n {}", self.code);
         Ok(())
     }
     fn execute(&mut self) -> Result<String, SniprunError> {
