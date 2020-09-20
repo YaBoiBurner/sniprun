@@ -100,6 +100,17 @@ pub trait Interpreter {
     /// return a tuple of Strings : ("code that must be excluded from the entry point", "what's
     /// left and that can or must be put inside the eventual 'main'")
     fn get_code_dependencies(&mut self) -> Option<(String, String)> {
+        {
+            info!(
+                "current line -> {:?}",
+                self.get_data()
+                    .nvim_instance
+                    .unwrap()
+                    .lock()
+                    .unwrap()
+                    .get_current_line()
+            )
+        }
         let nir = self
             .get_data()
             .nvim_instance
@@ -108,7 +119,7 @@ pub trait Interpreter {
             .unwrap()
             .command_output("lua require'lua.nvim_treesitter_interface'.list_nodes_in_range()");
         if let Ok(nir_unwrapped) = nir {
-            let line = nir_unwrapped.split(" ");
+            let line = nir_unwrapped.to_string();
             info!("lines -> {:?}", line);
         } else {
             return None;

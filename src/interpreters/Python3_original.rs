@@ -44,7 +44,7 @@ impl Python3_original {
         file.read_to_string(&mut contents)?;
 
         for line in contents.lines() {
-            info!("lines are : {}", line);
+            // info!("lines are : {}", line);
             if line.contains("import ") //basic selection
                 && line.trim().chars().next() != Some('#')
             && module_used(line, &contents)

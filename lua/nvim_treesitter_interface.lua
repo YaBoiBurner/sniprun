@@ -29,6 +29,7 @@ function M.list_nodes_in_range(start_row, start_col, end_row, end_col, bufnr)
 
   --cheating...
  fnode = ts_utils.get_node_at_cursor()
+ print(ts_utils.get_node_text(fnode))
  function_calls = {}
  table.insert(function_calls, fnode)
 
