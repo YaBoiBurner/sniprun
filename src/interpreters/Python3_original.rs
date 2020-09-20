@@ -133,6 +133,7 @@ exit_value1428571999 = str(mystdout1427851999.getvalue())";
         Ok(())
     }
     fn build(&mut self) -> Result<(), SniprunError> {
+        self.get_code_dependencies();
         Ok(())
     }
     fn execute(&mut self) -> Result<String, SniprunError> {

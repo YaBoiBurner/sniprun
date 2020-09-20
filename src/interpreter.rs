@@ -1,5 +1,7 @@
 use crate::error::SniprunError;
 use crate::DataHolder;
+use log::info;
+use neovim_lib::NeovimApi;
 
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
 #[allow(dead_code)]
@@ -93,5 +95,24 @@ pub trait Interpreter {
     /// default run function ran from the launcher (run_at_level(max_level))
     fn run(&mut self) -> Result<String, SniprunError> {
         self.run_at_level(self.get_current_level())
+    }
+
+    /// return a tuple of Strings : ("code that must be excluded from the entry point", "what's
+    /// left and that can or must be put inside the eventual 'main'")
+    fn get_code_dependencies(&mut self) -> Option<(String, String)> {
+        let nir = self
+            .get_data()
+            .nvim_instance
+            .unwrap()
+            .lock()
+            .unwrap()
+            .command_output("lua require'lua.nvim_treesitter_interface'.list_nodes_in_range()");
+        if let Ok(nir_unwrapped) = nir {
+            let line = nir_unwrapped.split(" ");
+            info!("lines -> {:?}", line);
+        } else {
+            return None;
+        }
+        return None;
     }
 }

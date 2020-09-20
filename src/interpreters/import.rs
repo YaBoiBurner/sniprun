@@ -8,7 +8,7 @@ use std::fs::{read_to_string, write, DirBuilder, File};
 use std::io::prelude::*;
 use std::process::Command;
 
-use neovim_lib::NeovimApi;
+use neovim_lib::{Neovim, NeovimApi};
 
 //python-specific
 use pyo3::types::PyDict;
