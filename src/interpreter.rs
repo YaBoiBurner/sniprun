@@ -119,8 +119,11 @@ pub trait Interpreter {
             .unwrap()
             .command_output("lua require'lua.nvim_treesitter_interface'.list_nodes_in_range()");
         if let Ok(nir_unwrapped) = nir {
-            let line = nir_unwrapped.to_string();
-            info!("lines -> {:?}", line);
+            for line in nir_unwrapped.lines() {
+                info!("lines -> {:?}", line);
+                let range: Vec<&str> = line.split(" ").collect();
+                info!("range -> {:?}", range);
+            }
         } else {
             return None;
         }
