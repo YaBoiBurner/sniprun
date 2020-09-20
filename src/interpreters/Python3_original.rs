@@ -95,7 +95,7 @@ impl Interpreter for Python3_original {
     }
 
     fn get_max_support_level() -> SupportLevel {
-        SupportLevel::Import
+        SupportLevel::File
     }
 
     fn fetch_code(&mut self) -> Result<(), SniprunError> {
@@ -139,11 +139,11 @@ impl Interpreter for Python3_original {
                     }
                 }
             }
+            self.code = code_to_add + &self.code;
         }
         Ok(())
     }
     fn add_boilerplate(&mut self) -> Result<(), SniprunError> {
-        self.get_code_dependencies();
         self.code = self.imports.clone()
             + &String::from(
                 "from io import StringIO
