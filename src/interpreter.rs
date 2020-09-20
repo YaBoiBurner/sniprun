@@ -97,9 +97,9 @@ pub trait Interpreter {
         self.run_at_level(self.get_current_level())
     }
 
-    /// return a tuple of Strings : ("code that must be excluded from the entry point", "what's
-    /// left and that can or must be put inside the eventual 'main'")
-    fn get_code_dependencies(&mut self) -> Option<(String, String)> {
+    /// return a Range object containing the start and end/ row and columns of the code that hould
+    /// be included
+    fn get_code_dependencies(&mut self) -> Option<Vec<Range>> {
         {
             info!(
                 "current line -> {:?}",
@@ -119,14 +119,35 @@ pub trait Interpreter {
             .unwrap()
             .command_output("lua require'lua.nvim_treesitter_interface'.list_nodes_in_range()");
         if let Ok(nir_unwrapped) = nir {
+            let mut vec_range = vec![];
             for line in nir_unwrapped.lines() {
                 info!("lines -> {:?}", line);
                 let range: Vec<&str> = line.split(" ").collect();
                 info!("range -> {:?}", range);
+                vec_range.push(Range::from(range));
             }
+            return Some(vec_range);
         } else {
             return None;
         }
-        return None;
+    }
+}
+
+pub struct Range {
+    pub start_row: usize,
+    pub start_col: usize,
+    pub end_row: usize,
+    pub end_col: usize,
+}
+
+impl From<Vec<&str>> for Range {
+    fn from(v: Vec<&str>) -> Self {
+        assert!(v.len() >= 4);
+        Range {
+            start_row: v[0].parse::<usize>().unwrap(),
+            start_col: v[1].parse::<usize>().unwrap(),
+            end_row: v[2].parse::<usize>().unwrap(),
+            end_col: v[3].parse::<usize>().unwrap(),
+        }
     }
 }
