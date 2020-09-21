@@ -30,21 +30,21 @@ function M.list_nodes_in_range(start_row, end_row, bufnr)
     -- get a table of all used variables
     --
     --
-  local query_group = 'locals'
-  local lang = parsers.get_buf_lang(bufnr)
-  if not lang then return function() end end
+  -- local query_group = 'locals'
+  -- local lang = parsers.get_buf_lang(bufnr)
+  -- if not lang then return function() end end
+  --
+  -- local query = M.get_query(lang, query_group)
+  -- if not query then return function() end end
+  --
+  -- local parser = parsers.get_parser(bufnr, lang)
+  -- if not parser then return function() end end
+  --
+  -- local root = root or parser:parse():root()
 
-  local query = M.get_query(lang, query_group)
-  if not query then return function() end end
-
-  local parser = parsers.get_parser(bufnr, lang)
-  if not parser then return function() end end
-
-  local root = root or parser:parse():root()
 
 
-
-  local function_iterator = M.iter_prepared_matches(query, root, bufnr, start_row, end_row)
+  -- local function_iterator = M.iter_prepared_matches(query, root, bufnr, start_row, end_row)
   --cheating...
  fnode = ts_utils.get_node_at_cursor()
  function_calls = {}
