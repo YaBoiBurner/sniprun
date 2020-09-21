@@ -51,7 +51,7 @@ function M.list_nodes_in_range(start_row, end_row, bufnr)
  table.insert(function_calls, fnode)
 
 
- for _,call in function_iterator do
+ for call in function_iterator do
    print(M.get_definition_scope_of_function_node(call, bufnr))
    end
 
