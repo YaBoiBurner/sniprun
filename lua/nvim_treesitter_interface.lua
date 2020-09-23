@@ -24,7 +24,7 @@ end
 -- ! the end row is exclusive so you'll often need to add 1
 function M.list_nodes_in_range(start_row, end_row, bufnr)
   local bufnr = bufnr or api.nvim_get_current_buf()
-  for _,node in ipairs(query_module.get_capture_matches(bufnr,"@definition.function","locals")) do
+  for _,node in ipairs(query_module.get_capture_matches(bufnr,"@function","function_defs")) do
     print("node=", node)
   end
 
