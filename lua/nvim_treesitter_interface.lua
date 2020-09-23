@@ -33,14 +33,11 @@ function M.list_nodes_in_range(start_row, end_row, bufnr)
   local query_group = 'function_defs'
   local lang = parsers.get_buf_lang(bufnr)
   print("lang= ",lang)
-  if not lang then return function() end end
 
   local query = query_module.get_query(lang, query_group)
-  if not query then return function() end end
   print("query= ",query)
 
   local parser = parsers.get_parser(bufnr, lang)
-  if not parser then return function() end end
   print("parser= ",parser)
 
   local root = parser:parse():root()
@@ -50,7 +47,7 @@ function M.list_nodes_in_range(start_row, end_row, bufnr)
 
   for match in  query_module.iter_prepared_matches(query, root, bufnr, start_row, end_row)
   do
-    print(match)
+    print(match[1])
   end
 
   --cheating...
