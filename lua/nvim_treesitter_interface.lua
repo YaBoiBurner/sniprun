@@ -26,6 +26,7 @@ function M.list_nodes_in_range(start_row, end_row, bufnr)
   local bufnr = bufnr or api.nvim_get_current_buf()
   for _,node in ipairs(query_module.get_capture_matches(bufnr,"@function","function_defs")) do
     print("node=", node)
+    print("node.node =" node.node)
   end
 
   -- get a table of all function call in the scope
@@ -51,7 +52,7 @@ function M.list_nodes_in_range(start_row, end_row, bufnr)
   for match in  query_module.iter_prepared_matches(query, root, bufnr, start_row, end_row)
   do
     print(match)
-    for i,j in ipairs(match) do
+    for i,j in pairs(match) do
       print(i,j)
     end
 
