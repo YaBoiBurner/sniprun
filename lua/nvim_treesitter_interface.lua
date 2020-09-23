@@ -47,7 +47,10 @@ function M.list_nodes_in_range(start_row, end_row, bufnr)
 
   for match in  query_module.iter_prepared_matches(query, root, bufnr, start_row, end_row)
   do
-    print(match[1])
+    print(match)
+    for i,j in ipairs(match) do
+      print(i,j)
+    end
   end
 
   --cheating...
