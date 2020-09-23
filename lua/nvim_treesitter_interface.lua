@@ -27,7 +27,7 @@ function M.list_nodes_in_range(start_row, end_row, bufnr)
   for _,node in ipairs(query_module.get_capture_matches(bufnr,"@function","function_defs")) do
     print("node=", node)
     print("node.node =", node.node)
-    print("node.node name =", ts_utils.get_node_text(node.node))
+    print("node.node name =", ts_utils.get_node_text(node.node)[1])
   end
 
   -- get a table of all function call in the scope
