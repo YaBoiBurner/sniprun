@@ -4,9 +4,9 @@
 
 ; Function calls
 
-(decorator) @function
-((decorator (dotted_name (identifier) @function))
- (#vim-match? @function "^([A-Z])@!.*$"))
+;(decorator) @function
+;((decorator (dotted_name (identifier) @function))
+; (#vim-match? @function "^([A-Z])@!.*$"))
 
 (call
   function: (identifier) @function)
@@ -15,12 +15,12 @@
   function: (attribute
               attribute: (identifier) @method))
 
-((call
-   function: (identifier) @constructor)
- (#match? @constructor "^[A-Z]"))
-
-((call
-  function: (attribute
-              attribute: (identifier) @constructor))
- (#match? @constructor "^[A-Z]"))
+;((call
+;   function: (identifier) @constructor)
+; (#match? @constructor "^[A-Z]"))
+;
+;((call
+;  function: (attribute
+;              attribute: (identifier) @constructor))
+; (#match? @constructor "^[A-Z]"))
 
