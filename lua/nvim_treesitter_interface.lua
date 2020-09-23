@@ -55,7 +55,7 @@ function M.list_nodes_in_range(start_row, end_row, bufnr)
 --  table.insert(function_calls, fnode)
 
 
- for q in function_iterator do
+ for q in function_iterator() do
    print(q)
  end
 
