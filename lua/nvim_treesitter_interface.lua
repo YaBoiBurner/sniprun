@@ -24,52 +24,10 @@ end
 -- ! the end row is exclusive so you'll often need to add 1
 function M.list_nodes_in_range(start_row, end_row, bufnr)
   local bufnr = bufnr or api.nvim_get_current_buf()
-  for _,node in ipairs(query_module.get_capture_matches(bufnr,"@function","function_defs")) do
-    print("node=", node)
-    print("node.node =", node.node)
-    print("node.node name =", ts_utils.get_node_text(node.node)[1])
+  for _,node in ipairs(query_module.get_capture_matches(bufnr,"@function","code_deps")) do
+    local range = M.get_definition_scope_of_function_(node.node)
+    print(range)
   end
-
-  -- get a table of all function call in the scope
-    -- get a table of all method calls
-    -- get a table of all used variables
-    --
-    --
-  local query_group = 'function_defs'
-  local lang = parsers.get_buf_lang(bufnr)
-  print("lang= ",lang)
-
-  local query = query_module.get_query(lang, query_group)
-  print("query= ",query)
-
-  local parser = parsers.get_parser(bufnr, lang)
-  print("parser= ",parser)
-
-  local root = parser:parse():root()
-
-  print("root= ",root)
-
-
-  for match in  query_module.iter_prepared_matches(query, root, bufnr, start_row, end_row)
-  do
-    print(match)
-    for i,j in pairs(match) do
-      print(i,j)
-    end
-
-    if next(match)==nil then
-        print("math table is empty")
-      end
-  end
-
-  --cheating...
---  fnode = ts_utils.get_node_at_cursor()
---  function_calls = {}
---  table.insert(function_calls, fnode)
-
---  for call do
---    print(M.get_definition_scope_of_function_node(call, bufnr))
---    end
 
 end
 
