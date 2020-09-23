@@ -11,9 +11,9 @@
 (call
   function: (identifier) @function)
 
-(call
-  function: (attribute
-              attribute: (identifier) @method))
+;(call
+;  function: (attribute
+;              attribute: (identifier) @method))
 
 ;((call
 ;   function: (identifier) @constructor)
