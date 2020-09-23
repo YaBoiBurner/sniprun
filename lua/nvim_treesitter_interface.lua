@@ -30,8 +30,8 @@ function M.list_nodes_in_range(start_row, end_row, bufnr)
   for _,node in ipairs(query_module.get_capture_matches(bufnr,"@function","code_deps")) do
     print("node found:", node.node)
     print("node's name:" , ts_utils.get_node_text(node.node)[1])
-    -- local sr,sc,er,ec = M.get_definition_scope_of_function_node(node.node,bufnr)
-    -- print(sr,sc,er,ec)
+    local sr,sc,er,ec = M.get_definition_scope_of_function_node(node.node,bufnr)
+    print(sr,sc,er,ec)
   end
 
 end
