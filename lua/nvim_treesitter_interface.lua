@@ -12,6 +12,8 @@ function M.get_definition_scope_of_function_node(node, bufnr)
   local bufnr = bufnr or api.nvim_get_current_buf()
 
   local definition = locals.find_definition(node, bufnr)
+  print("def=",definition)
+  print("defname=", ts_utils.get_node_text(definition))
 
 
   local containing_scope = locals.containing_scope(definition, bufnr)
