@@ -25,7 +25,8 @@ end
 function M.list_nodes_in_range(start_row, end_row, bufnr)
   local bufnr = bufnr or api.nvim_get_current_buf()
   for _,node in ipairs(query_module.get_capture_matches(bufnr,"@function","code_deps")) do
-    local range = M.get_definition_scope_of_function_(node.node)
+    print("node found:", node.node)
+    local range = M.get_definition_scope_of_function_(node.node,bufnr)
     print(range)
   end
 
