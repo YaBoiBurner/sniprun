@@ -10,6 +10,8 @@ fn main() {
     let k = have_two();
     let j = have_three();
     let i = 0;
+    let a = Some(1);
+
 
     let z = j + k
 }
