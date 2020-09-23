@@ -12,6 +12,6 @@ fn main() {
     let i = 0;
     let a = Some(1);
 
-
-    let z = j + k
+    let z = j + k;
+    println!("{:?}", z);
 }
