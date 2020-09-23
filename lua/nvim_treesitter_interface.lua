@@ -47,10 +47,14 @@ function M.list_nodes_in_range(start_row, end_row, bufnr)
 
   for match in  query_module.iter_prepared_matches(query, root, bufnr, start_row, end_row)
   do
-    print(match, match.node)
+    print(match)
     for i,j in ipairs(match) do
       print(i,j)
     end
+
+    if next(match)==nil then
+        print("math table is empty")
+      end
   end
 
   --cheating...
