@@ -14,6 +14,7 @@ function M.get_definition_scope_of_function_node(node, bufnr)
   local definition = locals.find_definition(node, bufnr)
   print("def=",definition)
   print("defname=", ts_utils.get_node_text(definition)[1])
+  print("defscope=", ts_utils.get_node_range(definition))
 
 
   local containing_scope = locals.containing_scope(definition, bufnr)
