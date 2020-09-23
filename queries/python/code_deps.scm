@@ -8,9 +8,9 @@
 ;((decorator (dotted_name (identifier) @function))
 ; (#vim-match? @function "^([A-Z])@!.*$"))
 
-(call
-  function: (identifier) @function)
-
+;(call
+;  function: (identifier) @function)
+;
 ;(call
 ;  function: (attribute
 ;              attribute: (identifier) @method))
