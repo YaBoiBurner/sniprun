@@ -48,16 +48,15 @@ function M.list_nodes_in_range(start_row, end_row, bufnr)
   print("root= ",root)
 
 
-  local function_iterator = query_module.iter_prepared_matches(query, root, bufnr, start_row, end_row)
+  for match in  query_module.iter_prepared_matches(query, root, bufnr, start_row, end_row)
+  do
+    print(match)
+  end
+
   --cheating...
 --  fnode = ts_utils.get_node_at_cursor()
 --  function_calls = {}
 --  table.insert(function_calls, fnode)
-
-
- for q in function_iterator() do
-   print(q)
- end
 
 --  for call do
 --    print(M.get_definition_scope_of_function_node(call, bufnr))
