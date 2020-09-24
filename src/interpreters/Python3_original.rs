@@ -164,7 +164,7 @@ exit_value1428571999 = str(mystdout1427851999.getvalue())";
         Ok(())
     }
     fn build(&mut self) -> Result<(), SniprunError> {
-        info!("python code:\n {}", self.code);
+        // info!("python code:\n {}", self.code);
         Ok(())
     }
     fn execute(&mut self) -> Result<String, SniprunError> {
