@@ -103,11 +103,12 @@ pub trait Interpreter {
         let mut vrange = vec![Range {
             start_row: self.get_data().range[0] as usize,
             start_col: 0,
-            end_row: self.get_data().range[1] as usize,
+            end_row: self.get_data().range[1] as usize + 1,
             end_col: 99999,
         }];
 
         for range in vrange.clone() {
+            info!("vrange: {:?}", vrange.clone());
             let mut vec_range = vec![];
             let nir = self
                 .get_data()
@@ -140,7 +141,7 @@ pub trait Interpreter {
     }
 }
 
-#[derive(Copy, Clone, Eq, PartialEq)]
+#[derive(Copy, Clone, Eq, PartialEq, Debug)]
 pub struct Range {
     pub start_row: usize,
     pub start_col: usize,
