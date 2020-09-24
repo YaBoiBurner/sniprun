@@ -132,7 +132,8 @@ pub trait Interpreter {
                 if vrange == vec_range {
                     return Some(vec_range);
                 } else {
-                    vrange = vec_range.clone();
+                    vrange.extend(vec_range.clone());
+                    vrange = squash_vec_range(vrange);
                     continue;
                 }
             } else {
