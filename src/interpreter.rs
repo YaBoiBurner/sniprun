@@ -100,47 +100,49 @@ pub trait Interpreter {
     /// return a Range object containing the start and end/ row and columns of the code that hould
     /// be included
     fn get_code_dependencies(&mut self) -> Option<Vec<Range>> {
-        let mut vrange = vec![Range {
+        let vrange = vec![Range {
             start_row: self.get_data().range[0] as usize,
             start_col: 0,
             end_row: self.get_data().range[1] as usize + 1,
             end_col: 99999,
         }];
 
-        info!("vrange: {:?}", vrange.clone());
-        for range in vrange.clone() {
+        fn walk_up_ranges(vrange: Vec<Range>, data: &DataHolder) -> Option<Vec<Range>> {
             let mut vec_range = vec![];
-            let nir = self
-                .get_data()
-                .nvim_instance
-                .unwrap()
-                .lock()
-                .unwrap()
-                .command_output(&format!(
-                    "lua require'lua.nvim_treesitter_interface'.list_nodes_in_range({},{})",
-                    range.start_row, range.end_row
-                ));
-            if let Ok(nir_unwrapped) = nir {
-                for line in nir_unwrapped.lines() {
-                    // info!("lines -> {:?}", line);
-                    let range: Vec<&str> = line.split(" ").collect();
-                    // info!("range -> {:?}", range);
-                    vec_range.push(Range::from(range));
-                }
-                info!("vec_range -> {:?}", vec_range);
-                info!("vrange -> {:?}", vrange);
-                if vrange == vec_range {
-                    return Some(vec_range);
+            for range in vrange.clone() {
+                let nir = data
+                    .nvim_instance
+                    .clone()
+                    .unwrap()
+                    .lock()
+                    .unwrap()
+                    .command_output(&format!(
+                        "lua require'lua.nvim_treesitter_interface'.list_nodes_in_range({},{})",
+                        range.start_row, range.end_row
+                    ));
+                if let Ok(nir_unwrapped) = nir {
+                    for line in nir_unwrapped.lines() {
+                        // info!("lines -> {:?}", line);
+                        let range: Vec<&str> = line.split(" ").collect();
+                        // info!("range -> {:?}", range);
+                        vec_range.push(Range::from(range));
+                    }
                 } else {
-                    vrange.extend(vec_range.clone());
-                    vrange = squash_vec_range(vrange);
-                    continue;
+                    return None;
                 }
+            }
+            info!("initial range : {:?}", vrange);
+            info!("next range : {:?}", squash_vec_range(vec_range.clone()));
+            let future_range = squash_vec_range(vec_range);
+            if future_range == vrange {
+                return Some(future_range);
             } else {
-                return None;
+                info!("searching at superior level");
+                return walk_up_ranges(future_range, data);
             }
         }
-        return None;
+
+        return walk_up_ranges(vrange, &self.get_data());
     }
 }
 
