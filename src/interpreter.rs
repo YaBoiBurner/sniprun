@@ -107,8 +107,8 @@ pub trait Interpreter {
             end_col: 99999,
         }];
 
+        info!("vrange: {:?}", vrange.clone());
         for range in vrange.clone() {
-            info!("vrange: {:?}", vrange.clone());
             let mut vec_range = vec![];
             let nir = self
                 .get_data()
@@ -122,11 +122,13 @@ pub trait Interpreter {
                 ));
             if let Ok(nir_unwrapped) = nir {
                 for line in nir_unwrapped.lines() {
-                    info!("lines -> {:?}", line);
+                    // info!("lines -> {:?}", line);
                     let range: Vec<&str> = line.split(" ").collect();
-                    info!("range -> {:?}", range);
+                    // info!("range -> {:?}", range);
                     vec_range.push(Range::from(range));
                 }
+                info!("vec_range -> {:?}", vec_range);
+                info!("vrange -> {:?}", vrange);
                 if vrange == vec_range {
                     return Some(vec_range);
                 } else {
