@@ -100,44 +100,81 @@ pub trait Interpreter {
     /// return a Range object containing the start and end/ row and columns of the code that hould
     /// be included
     fn get_code_dependencies(&mut self) -> Option<Vec<Range>> {
-        {
-            info!(
-                "current line -> {:?}",
-                self.get_data()
-                    .nvim_instance
-                    .unwrap()
-                    .lock()
-                    .unwrap()
-                    .get_current_line()
-            )
-        }
-        let nir = self
-            .get_data()
-            .nvim_instance
-            .unwrap()
-            .lock()
-            .unwrap()
-            .command_output("lua require'lua.nvim_treesitter_interface'.list_nodes_in_range()");
-        if let Ok(nir_unwrapped) = nir {
+        let mut vrange = vec![Range {
+            start_row: self.get_data().range[0] as usize,
+            start_col: 0,
+            end_row: self.get_data().range[1] as usize,
+            end_col: 99999,
+        }];
+
+        for range in vrange.clone() {
             let mut vec_range = vec![];
-            for line in nir_unwrapped.lines() {
-                info!("lines -> {:?}", line);
-                let range: Vec<&str> = line.split(" ").collect();
-                info!("range -> {:?}", range);
-                vec_range.push(Range::from(range));
+            let nir = self
+                .get_data()
+                .nvim_instance
+                .unwrap()
+                .lock()
+                .unwrap()
+                .command_output(&format!(
+                    "lua require'lua.nvim_treesitter_interface'.list_nodes_in_range({},{})",
+                    range.start_row, range.end_row
+                ));
+            if let Ok(nir_unwrapped) = nir {
+                for line in nir_unwrapped.lines() {
+                    info!("lines -> {:?}", line);
+                    let range: Vec<&str> = line.split(" ").collect();
+                    info!("range -> {:?}", range);
+                    vec_range.push(Range::from(range));
+                }
+                if vrange == vec_range {
+                    return Some(vec_range);
+                } else {
+                    vrange = vec_range.clone();
+                    continue;
+                }
+            } else {
+                return None;
             }
-            return Some(vec_range);
-        } else {
-            return None;
         }
+        return None;
     }
 }
 
+#[derive(Copy, Clone, Eq, PartialEq)]
 pub struct Range {
     pub start_row: usize,
     pub start_col: usize,
     pub end_row: usize,
     pub end_col: usize,
+}
+
+fn included(range: &Range, containing_range: &Range) -> bool {
+    (range.start_row > containing_range.start_row
+        || (range.start_row == containing_range.start_row
+            && range.start_col >= containing_range.start_col))
+        && (range.end_row < containing_range.end_row
+            || (range.end_row == containing_range.end_row
+                && range.end_col <= containing_range.end_col))
+}
+
+fn in_vec(range: &Range, v: &Vec<Range>) -> bool {
+    for r in v {
+        if included(range, r) {
+            return true;
+        }
+    }
+    return false;
+}
+
+fn squash_vec_range(v: Vec<Range>) -> Vec<Range> {
+    let mut nv = Vec::new();
+
+    for &range in &v {
+        if !(in_vec(&range, &v)) {
+            nv.push(range);
+        }
+    }
+    return nv;
 }
 
 impl From<Vec<&str>> for Range {

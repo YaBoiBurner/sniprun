@@ -12,10 +12,10 @@ function M.get_definition_scope_of_function_node(node, bufnr)
   local bufnr = bufnr or api.nvim_get_current_buf()
 
   local definition = locals.find_definition(node, bufnr)
-  print("def=",definition)
-  print("defname=", ts_utils.get_node_text(definition)[1])
-  print("defscope=", ts_utils.get_node_range(definition))
-
+  -- print("def=",definition)
+  -- print("defname=", ts_utils.get_node_text(definition)[1])
+  -- print("defscope=", ts_utils.get_node_range(definition))
+  --
 
   local containing_scope = locals.containing_scope(definition, bufnr)
 
@@ -28,8 +28,8 @@ end
 function M.list_nodes_in_range(start_row, end_row, bufnr)
   local bufnr = bufnr or api.nvim_get_current_buf()
   for _,node in ipairs(query_module.get_capture_matches(bufnr,"@function","code_deps")) do
-    print("node found:", node.node)
-    print("node's name:" , ts_utils.get_node_text(node.node)[1])
+    -- print("node found:", node.node)
+    -- print("node's name:" , ts_utils.get_node_text(node.node)[1])
     local sr,sc,er,ec = M.get_definition_scope_of_function_node(node.node,bufnr)
     print(sr,sc,er,ec)
   end
