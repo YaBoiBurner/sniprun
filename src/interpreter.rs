@@ -104,7 +104,7 @@ pub trait Interpreter {
             start_row: self.get_data().range[0] as usize,
             start_col: 0,
             end_row: self.get_data().range[1] as usize + 1,
-            end_col: 99999,
+            end_col: 0,
         }];
 
         fn walk_up_ranges(vrange: Vec<Range>, data: &DataHolder) -> Option<Vec<Range>> {
@@ -122,9 +122,9 @@ pub trait Interpreter {
                     ));
                 if let Ok(nir_unwrapped) = nir {
                     for line in nir_unwrapped.lines() {
-                        // info!("lines -> {:?}", line);
+                        info!("lines -> {:?}", line);
                         let range: Vec<&str> = line.split(" ").collect();
-                        // info!("range -> {:?}", range);
+                        info!("range -> {:?}", range);
                         vec_range.push(Range::from(range));
                     }
                 } else {
@@ -132,8 +132,9 @@ pub trait Interpreter {
                 }
             }
             info!("initial range : {:?}", vrange);
-            info!("next range : {:?}", squash_vec_range(vec_range.clone()));
+            info!("next range : {:?}", vec_range.clone());
             let future_range = squash_vec_range(vec_range);
+            info!("next range confirmed : {:?}", future_range);
             if future_range == vrange {
                 return Some(future_range);
             } else {
@@ -176,7 +177,7 @@ fn squash_vec_range(v: Vec<Range>) -> Vec<Range> {
     let mut nv = Vec::new();
 
     for &range in &v {
-        if !(in_vec(&range, &v)) {
+        if !(in_vec(&range, &nv)) {
             nv.push(range);
         }
     }

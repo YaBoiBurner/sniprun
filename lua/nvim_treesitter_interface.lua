@@ -12,6 +12,7 @@ function M.get_definition_scope_of_function_node(node, bufnr)
   local bufnr = bufnr or api.nvim_get_current_buf()
 
   local definition = locals.find_definition(node, bufnr)
+  --TODO if def = node abort
   -- print("def=",definition)
   -- print("defname=", ts_utils.get_node_text(definition)[1])
   -- print("defscope=", ts_utils.get_node_range(definition))

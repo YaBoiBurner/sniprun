@@ -144,6 +144,7 @@ impl Interpreter for Python3_original {
                 }
             }
             code_to_add.push_str("\n");
+            info!("code to add :\n {}", code_to_add);
             self.code = code_to_add + &self.code;
         }
         Ok(())
