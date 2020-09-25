@@ -14,7 +14,6 @@ function M.get_definition_scope_of_function_node(node, bufnr)
   local definition = locals.find_definition(node, bufnr)
   --TODO if def = node abort
   if definition == node then
-    print("oupsie")
     return
   end
   -- print("def=",definition)

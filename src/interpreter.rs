@@ -100,12 +100,13 @@ pub trait Interpreter {
     /// return a Range object containing the start and end/ row and columns of the code that hould
     /// be included
     fn get_code_dependencies(&mut self) -> Option<Vec<Range>> {
-        let vrange = vec![Range {
-            start_row: self.get_data().range[0] as usize,
+        let initial_range = Range {
+            start_row: self.get_data().range[0] as usize - 1,
             start_col: 0,
-            end_row: self.get_data().range[1] as usize + 1,
+            end_row: self.get_data().range[1] as usize - 1,
             end_col: 0,
-        }];
+        };
+        let vrange = vec![initial_range];
 
         fn walk_up_ranges(vrange: Vec<Range>, data: &DataHolder) -> Option<Vec<Range>> {
             let mut vec_range = vec![];
@@ -119,7 +120,7 @@ pub trait Interpreter {
                     .command_output(&format!(
                         "lua require'lua.nvim_treesitter_interface'.list_nodes_in_range({},{})",
                         range.start_row, range.end_row
-                    ));
+                    )); //account for 0-based range rather than 1based line number
                 if let Ok(nir_unwrapped) = nir {
                     for line in nir_unwrapped.lines() {
                         info!("lines -> {:?}", line);
@@ -133,6 +134,7 @@ pub trait Interpreter {
             }
             info!("initial range : {:?}", vrange);
             info!("next range : {:?}", vec_range.clone());
+            vec_range.extend(vrange.clone());
             let future_range = squash_vec_range(vec_range);
             info!("next range confirmed : {:?}", future_range);
             if future_range == vrange {
@@ -143,7 +145,13 @@ pub trait Interpreter {
             }
         }
 
-        return walk_up_ranges(vrange, &self.get_data());
+        if let Some(mut final_deps) = walk_up_ranges(vrange, &self.get_data()) {
+            let index = final_deps.iter().position(|x| *x == initial_range).unwrap();
+            final_deps.swap_remove(index);
+            return Some(final_deps);
+        } else {
+            return None;
+        }
     }
 }
 

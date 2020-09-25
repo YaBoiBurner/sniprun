@@ -129,7 +129,7 @@ impl Interpreter for Python3_original {
                     if i < range.start_row {
                         continue;
                     } else if i == range.start_row {
-                        code_to_add.push_str(&line[range.start_col..]);
+                        code_to_add.push_str(&line[..]); //should start at range.start_col but this break indentation
                         code_to_add.push_str("\n");
                     } else if i == range.end_row {
                         code_to_add.push_str(&line[..range.end_col]);
