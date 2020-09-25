@@ -74,7 +74,7 @@ function M.list_nodes_in_range(start_row, end_row, bufnr)
     -- print("node found:", node.node)
     -- print("node's name:" , ts_utils.get_node_text(node.node)[1])
     local sr,sc,er,ec = M.get_definition_scope_of_function_node(node.node,bufnr)
-    if not sr == nil then
+    if  sr ~= nil then
       print(sr,sc,er,ec)
     end
 
