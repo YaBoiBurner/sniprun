@@ -142,11 +142,13 @@ impl Interpreter for Python3_original {
                         code_to_add.push_str("\n");
                     }
                 }
+                code_to_add.push_str("\n"); //separate ranges by newline
             }
             code_to_add.push_str("\n");
             code_to_add = unindent(&format!("{}{}", "\n", code_to_add));
             info!("code to add :\n {}", code_to_add);
             self.code = code_to_add + &unindent(&format!("{}{}", "\n", self.code));
+            self.code.push_str("\n");
         }
         info!("got code: {}", self.code);
         Ok(())
