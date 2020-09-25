@@ -9,6 +9,7 @@ pub struct Python3_original {
     data: DataHolder,
     code: String,
     imports: String,
+    main_file_path: String,
 }
 
 fn module_used(line: &str, code: &str) -> bool {
@@ -63,11 +64,23 @@ try:\n" + "\t" + line
 
 impl Interpreter for Python3_original {
     fn new_with_level(data: DataHolder, level: SupportLevel) -> Box<Python3_original> {
+        //create a subfolder in the cache folder
+        let rwd = data.work_dir.clone() + "/rust_original";
+        let mut builder = DirBuilder::new();
+        builder.recursive(true);
+        builder
+            .create(&rwd)
+            .expect("Could not create directory for rust-original");
+
+        //pre-create string pointing to main file's and binary's path
+        let mfp = rwd.clone() + "/main.py";
+
         Box::new(Python3_original {
             data,
             support_level: level,
             code: String::from(""),
             imports: String::from(""),
+            main_file_path: mfp,
         })
     }
 
@@ -154,45 +167,27 @@ impl Interpreter for Python3_original {
         Ok(())
     }
     fn add_boilerplate(&mut self) -> Result<(), SniprunError> {
-        self.code = self.imports.clone()
-            + &String::from(
-                "from io import StringIO
-import sys
-
-sys.stdout = mystdout1427851999 = StringIO()
-
-",
-            )
-            + &unindent(&format!("{}{}", "\n", self.code.as_str()))
-            + "
-exit_value1428571999 = str(mystdout1427851999.getvalue())";
+        self.code = self.imports.clone() + &unindent(&format!("{}{}", "\n", self.code.as_str()));
         Ok(())
     }
     fn build(&mut self) -> Result<(), SniprunError> {
         // info!("python code:\n {}", self.code);
+        write(&self.main_file_path, &self.code)
+            .expect("Unable to write to file for python3_original");
         Ok(())
     }
     fn execute(&mut self) -> Result<String, SniprunError> {
-        let py = pyo3::Python::acquire_gil();
-        let locals = PyDict::new(py.python());
-        match py.python().run(self.code.as_str(), None, Some(locals)) {
-            Ok(_) => (),
-            Err(_e) => {
-                return Err(SniprunError::InterpreterError);
-            }
-        }
-        let py_stdout = locals.get_item("exit_value1428571999");
-        if let Some(unwrapped_stdout) = py_stdout {
-            let result: Result<String, _> = unwrapped_stdout.extract();
-            info!("python result :{:?}", result);
-            match result {
-                Ok(unwrapped_result) => return Ok(unwrapped_result),
-                Err(_e) => return Err(SniprunError::InterpreterError),
-            }
+        //run th binary and get the std output (or stderr)
+        let output = Command::new("python")
+            .arg(&self.main_file_path)
+            .output()
+            .expect("Unable to start process");
+        if output.status.success() {
+            return Ok(String::from_utf8(output.stdout).unwrap());
         } else {
-            return Err(SniprunError::InterpreterLimitationError(String::from(
-                "Code erased a needed value to get standart output)",
-            )));
+            return Err(SniprunError::RuntimeError(
+                String::from_utf8(output.stderr).unwrap(),
+            ));
         }
     }
 }

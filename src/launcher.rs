@@ -6,6 +6,7 @@ pub struct Launcher {
     pub data: DataHolder,
 }
 
+#[allow(unused_assignments)]
 impl Launcher {
     pub fn new(data: DataHolder) -> Self {
         Launcher { data }
