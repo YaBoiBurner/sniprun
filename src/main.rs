@@ -7,7 +7,7 @@ use log::{info, LevelFilter};
 use neovim_lib::{Neovim, NeovimApi, Session, Value};
 use simple_logging::log_to_file;
 use std::sync::{mpsc, Arc, Mutex};
-use std::thread;
+use std::{panic, thread};
 
 mod error;
 mod interpreter;
@@ -238,9 +238,11 @@ fn main() {
                     // return Ok(result) or Err(sniprunerror)
                     match result {
                         Ok(answer_str) => {
+                            info!("[MAINLOOP] Interpreter returning a Ok");
                             // do not display anything if string empty, as it may means the
                             // interpreter used the nvim handle directly
                             if !answer_str.is_empty() {
+                                info!("[MAINLOOP] non empty answer_str");
                                 let mut answer_str = answer_str.clone();
                                 answer_str = answer_str.replace("\\\"", "\"");
                                 answer_str = answer_str.replace("\"", "\\\"");

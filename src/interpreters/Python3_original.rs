@@ -186,7 +186,12 @@ impl Interpreter for Python3_original {
             return Ok(String::from_utf8(output.stdout).unwrap());
         } else {
             return Err(SniprunError::RuntimeError(
-                String::from_utf8(output.stderr).unwrap(),
+                String::from_utf8(output.stderr.clone())
+                    .unwrap()
+                    .lines()
+                    .last()
+                    .unwrap_or(&String::from_utf8(output.stderr).unwrap())
+                    .to_owned(),
             ));
         }
     }

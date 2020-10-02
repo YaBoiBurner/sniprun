@@ -39,6 +39,7 @@ function M.get_capture_matches(bufnr, capture_string, query_group, start_row, en
 
   local matches = {}
   for match in M.iter_group_results(bufnr, query_group, start_row, end_row) do
+
     local insert = utils.get_at_path(match, capture_string)
 
     if insert then
@@ -51,28 +52,27 @@ end
 function M.iter_group_results(bufnr, query_group,start_row, end_row)
   local lang = parsers.get_buf_lang(bufnr)
   if not lang then return function() end end
+  -- print("lang: ", lang)
 
   local query =query_module.get_query(lang, query_group)
   if not query then return function() end end
+  -- print("query created")
 
   local parser = parsers.get_parser(bufnr, lang)
   if not parser then return function() end end
-
-  local root = parser:parse():root()
-  -- local start_row, _, end_row, _ = root:range()
-
+  -- print("parsed", root)
   -- The end row is exclusive so we need to add 1 to it.
   return query_module.iter_prepared_matches(query, root, bufnr, start_row, end_row + 1)
 end
 
 
 
--- ! the end row is exclusive so you'll often need to add 1
-function M.list_nodes_in_range(start_row, end_row, bufnr)
+function M.print_function_nodes_in_range(start_row, end_row, bufnr)
   local bufnr = bufnr or api.nvim_get_current_buf()
   for _,node in ipairs(M.get_capture_matches(bufnr,"@function","code_deps",start_row, end_row)) do
     -- print("node found:", node.node)
     -- print("node's name:" , ts_utils.get_node_text(node.node)[1])
+    print(node)
     local sr,sc,er,ec = M.get_definition_scope_of_function_node(node.node,bufnr)
     if  sr ~= nil then
       print(sr,sc,er,ec)
@@ -80,6 +80,24 @@ function M.list_nodes_in_range(start_row, end_row, bufnr)
 
   end
 
+end
+
+function M.print_variable_nodes_in_range(start_row, end_row, bufnr)
+  local bufnr = bufnr or api.nvim_get_current_buf()
+  for _,node in ipairs(M.get_capture_matches(bufnr,"@variable","code_deps",start_row, end_row)) do
+    print("node found:", node)
+    -- print("node's name:" , ts_utils.get_node_text(node.node)[1])
+    -- local sr,sc,er,ec = M.get_definition_scope_of_function_node(node.node,bufnr)
+    -- if  sr ~= nil then
+    --   print(sr,sc,er,ec)
+    -- end
+
+  end
+end
+
+function M.list_nodes_in_range(start_row, end_row, bufnr)
+  M.print_function_nodes_in_range(start_row, end_row,bufnr)
+  -- M.print_variable_nodes_in_range(start_row, end_row,bufnr)
 end
 
 
