@@ -2,7 +2,7 @@
 
 ![](https://img.shields.io/badge/sniprun-v0.3.1-green.svg)
 
-Sniprun is a code runner plugin. It aims to provide stupidly fast partial code testing for interpreted **and compiled** [languages](#support-levels-and-languages)
+Sniprun is a code runner plugin. It aims to provide stupidly fast partial code testing for interpreted **and compiled** [languages](#support-levels-and-languages) . Sniprun blurs the line between standart save/run workflow, jupyter-like notebook, unit testing and REPL/interpreters.
 
 ![](demo.gif)
 
@@ -137,11 +137,11 @@ println!("hello n° {}", i+1);
 | D            | Unsupported\* |     | Perl       | Line          |
 | Elixir       | Unsupported\* |     | PHP        | Unsupported   |
 | Elm          | Unsupported\* |     | Python3    | Import        |
-| Erlang       | Unsupported\* |     | Ruby       | Unsupported\* |
-| F#           | Unsupported\* |     | R          | Unsupported\* |
+| Erlang       | Unsupported\* |     | Ruby       | Bloc          |
+| F#           | Unsupported\* |     | R          | Bloc          |
 | Go           | Bloc          |     | Rust       | Bloc          |
 | Groovy       | Unsupported\* |     | Scala      | Unsupported\* |
-| Haskell      | Unsupported\* |     | Scilab     | Unsupported\* |
+| Haskell      | Bloc          |     | Scilab     | Unsupported\* |
 | Idris        | Unsupported\* |     | Swift      | Unsupported\* |
 
 Want support for your language? Submit a feature request, or even better, [contribute](CONTRIBUTING.md), it's easy!
