@@ -43,6 +43,7 @@ impl Launcher {
                 return inter.run();
             }
         }
-        panic!()
+        //technically unreachable but generic interpreter may be obsolete at some point
+        return Err(SniprunError::NoInterpreterFound);
     }
 }

@@ -34,4 +34,7 @@ pub enum SniprunError {
     ///custom error for advanced interpreters, the error will be displayed as-is
     #[error("{0}")]
     CustomError(String),
+    ///internal error used by sniprun to echo there was not an available interpreter
+    #[error("No interpreter available for this filetype")]
+    NoInterpreterFound,
 }
