@@ -30,13 +30,13 @@ I just compiled, how do I test my code quickly?
 
 Is _my_ code running?
 
--> Assert that the file type detected by Neovim is contained in your list of supported file types. If there is already a implementation for your filetype/language, set (temporarly) your max support level to "Selected".
+-> Assert that the file type detected by Neovim is contained in your list of supported file types. If there is already a implementation for your filetype/language, set (temporarly) your max support level to "Selected" or config Sniprun to always use yours.
 
 ---
 
 I need to debug, how ?
 
--> Use the `info!("here")` macro instead of `println!("here")`. This writes to the log file you can find in ~/.cache/sniprun/sniprun.log.
+-> Use the `info!("here")` macro instead of `println!("here")`. This writes logs to the log file you can find in ~/.cache/sniprun/sniprun.log, when the :SnipRun command is invoked from a filetype-compatible Neovim buffer.
 
 ---
 
@@ -61,7 +61,7 @@ I need more than one file to write complicated code...
 
 Do I need to manage async running and compiling?
 
--> No, Sniprun takes care of that for you. You can implement a single-threaded synchronous code just like the Python3_original interpreter
+-> No, Sniprun takes care of that for you. You can implement a single-threaded synchronous code just like almost every interpreter out there.
 
 ---
 
@@ -86,7 +86,7 @@ A program (struct with methods) that can fetch code, execute it and return the r
 - Names for interpreters should be unique. Include filenames, and also the name returned by `get_name()` that should be identical (case difference is tolerated).
 - Extra files for the same interpreter go into a subdfolder alongside the interpreter's main file. The subfolder has the same name as the file, minus the extension.
 - The interpreter try to follow (and create by itself) SupportLevel hints when possible; for example, will not try to parse an entire project into when it has been determined SupportLevel::Line is enough to run the submitted code.
-- The interpreter should not panic (unless fatal), but return the SniprunError as suggested by the Interpreter trait
+- The interpreter should not panic (unless fatal), but return the SniprunError as suggested by the Interpreter trait's methods.
 
 ## Contribute to Sniprun itself
 

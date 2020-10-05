@@ -24,6 +24,27 @@ If you crash SnipRun, you can :SnipTerminate (that will kill Sniprun, and restar
 
 
 ==============================================================================
+COMMANDS                                  *sniprun-commands*
+
+>
+:SnipRun                runs the visual selection, or if none, the current line
+<
+
+>
+:SnipTerminate          stops sniprun and restart it, useful if it's crashing constantly
+<
+
+>
+:SnipReset              SnipTerminate but clears the cache (next :SnipRun will run slower)
+<
+
+>
+:SnipList               lists all the available interpreters
+<
+
+
+==============================================================================
 TROUBLESHOOTING                                  *sniprun-troubleshooting*
 
 If anything is not working; you should consult the README at github.com/michaelb/sniprun, as well as the documentation for every language in the doc/ folder at the same git repository.
+
