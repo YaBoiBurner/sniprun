@@ -13,6 +13,7 @@ panic = "unwind"
 
 [build-dependencies]
 # tree-sitter stuff
+tree-sitter = "0.17.0"
 cc="*"
 
 [dependencies]
