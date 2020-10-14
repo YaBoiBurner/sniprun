@@ -10,6 +10,11 @@ panic = "unwind"
 [profile.release]
 panic = "unwind"
 
+
+[build-dependencies]
+# tree-sitter stuff
+cc="*"
+
 [dependencies]
 neovim-lib="0.6.1"
 log="0.4.11"
@@ -20,7 +25,6 @@ regex="1"
 lazy_static="1.4.0"
 serde_json="1.0.57"
 
-# tree-sitter stuff
 
 # Python3 interpreter
 unindent="0.1.6"

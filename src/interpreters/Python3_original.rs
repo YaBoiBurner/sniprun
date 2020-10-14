@@ -108,7 +108,7 @@ impl Interpreter for Python3_original {
     }
 
     fn get_max_support_level() -> SupportLevel {
-        SupportLevel::File
+        SupportLevel::Import
     }
 
     fn fetch_code(&mut self) -> Result<(), SniprunError> {
@@ -129,40 +129,6 @@ impl Interpreter for Python3_original {
             self.code = String::from("");
         }
 
-        if self.get_current_level() >= SupportLevel::File {
-            let mut code_to_add = String::new();
-            code_to_add.push_str("\n");
-            let ranges = self.get_code_dependencies().unwrap_or(vec![]);
-            let mut file = File::open(&self.data.filepath).unwrap();
-            let mut contents = String::new();
-            file.read_to_string(&mut contents).unwrap();
-
-            for range in ranges {
-                for (i, line) in contents.lines().enumerate() {
-                    if i < range.start_row {
-                        continue;
-                    } else if i == range.start_row {
-                        code_to_add.push_str(&line[..]); //should start at range.start_col but this break indentation
-                        code_to_add.push_str("\n");
-                    } else if i == range.end_row {
-                        code_to_add.push_str(&line[..range.end_col]);
-                        code_to_add.push_str("\n");
-                    } else if i > range.end_row {
-                        continue;
-                    } else {
-                        //is in the middle of the range
-                        code_to_add.push_str(&line);
-                        code_to_add.push_str("\n");
-                    }
-                }
-                code_to_add.push_str("\n"); //separate ranges by newline
-            }
-            code_to_add.push_str("\n");
-            code_to_add = unindent(&format!("{}{}", "\n", code_to_add));
-            info!("code to add :\n {}", code_to_add);
-            self.code = code_to_add + &unindent(&format!("{}{}", "\n", self.code));
-            self.code.push_str("\n");
-        }
         info!("got code: {}", self.code);
         Ok(())
     }
