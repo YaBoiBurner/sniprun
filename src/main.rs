@@ -1,7 +1,6 @@
 //! This is the documentation for the Sniprun project
 //!
 //! Sniprun is a neovim plugin that run parts of code.
-
 use dirs::cache_dir;
 use log::{info, LevelFilter};
 use neovim_lib::{Neovim, NeovimApi, Session, Value};
@@ -134,7 +133,7 @@ impl EventHandler {
             if let Ok(real_current_line) = current_line {
                 self.data.current_line = real_current_line;
             }
-            info!("got current_line");
+            info!("got current_line: {:?}", self.data.current_line);
         }
 
         {
