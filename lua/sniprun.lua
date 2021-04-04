@@ -191,11 +191,11 @@ function M.health()
     local result = handle:read("*a")
     handle:close()
     local version = vim.split(result,'\n')[1]:match('[^tree%psitter].*')
-    health_ok('`tree-sitter` found '..version..' (parser generator, only needed for :TSInstallFromGrammar)')
+    health_ok('`tree-sitter` found (version :'..version..')')
   end
 
   if vim.fn.executable(binary_path) == 0 then health_error("sniprun binary not found!")
-  else health_ok("sniprun binary found") end
+  else health_ok("`sniprun` binary found") end
 
 
   if vim.fn.executable('cargo') == 0 then health_warn("Rust toolchain not available", {"[optionnal] Install the rust toolchain https://www.rust-lang.org/tools/install"})
