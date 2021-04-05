@@ -91,17 +91,17 @@ function M.configure_keymaps()
 
 end
 
-local function start()
+function M.start()
   if M.job_id ~= nil then return end
   M.job_id = vim.fn.jobstart({ binary_path }, { rpc = true })
 end
 
 function M.notify(method, ...)
-  start()
+  M.start()
   local status, err = pcall(vim.rpcnotify, M.job_id, method, ...)
   if not status then
     M.terminate()
-    start()
+    M.start()
     vim.rpcnotify(M.job_id, method, ...)
   end
 end
