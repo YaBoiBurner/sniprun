@@ -11,21 +11,31 @@ function M.get_nodes_in_range()
   return a
 end
 
--- c=get_nodes_in_range()
+c=M.get_nodes_in_range() *
+  2
+
+
+
+
+a=c
 
 
 function M.get_scope_of_definition(node,bufnr)
   local def,scope,kind = locals.find_definition(node,bufnr)
-
   if kind == 'function' then
       function_scope = locals.containing_scope(def, bufnr)
-      -- print("function scope: ",ts_utils.get_node_range(function_scope))
       line_begin, column_begin, line_end, column_end = ts_utils.get_node_range(function_scope)
       return line_begin, line_end
   elseif kind == 'var' then
       var_definition = def 
-  else
-    print("not a function: ", kind)
+      def_statement = var_definition:parent():parent()
+      line_begin, column_begin, line_end, column_end = ts_utils.get_node_range(def_statement)
+      return line_begin, line_end
+  elseif kind == 'method' then
+      function_scope = locals.containing_scope(def, bufnr)
+      print(ts_utils.get_node_range(function_scope))
+      line_begin, column_begin, line_end, column_end = ts_utils.get_node_range(function_scope)
+      return line_begin, line_end
   end
 end
 
