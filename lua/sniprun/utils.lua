@@ -1,5 +1,6 @@
 ts_utils=require'nvim-treesitter.ts_utils'
 locals=require'nvim-treesitter.locals'
+tsrange=require'nvim-treesitter.tsrange'.TSRange
 
 
 local M ={}
@@ -24,21 +25,22 @@ function M.get_scope_of_definition(node,bufnr)
   local def,scope,kind = locals.find_definition(node,bufnr)
   if kind == 'function' then
       function_scope = locals.containing_scope(def, bufnr)
-      line_begin, column_begin, line_end, column_end = ts_utils.get_node_range(function_scope)
-      return line_begin, line_end
+      return function_scope
   elseif kind == 'var' then
       var_definition = def 
       def_statement = var_definition:parent():parent()
-      line_begin, column_begin, line_end, column_end = ts_utils.get_node_range(def_statement)
-      return line_begin, line_end
+      return def_statement
   elseif kind == 'method' then
-      function_scope = locals.containing_scope(def, bufnr)
-      print(ts_utils.get_node_range(function_scope))
-      line_begin, column_begin, line_end, column_end = ts_utils.get_node_range(function_scope)
-      return line_begin, line_end
+      method_scope = locals.containing_scope(def, bufnr)
+      return method_scope
   end
 end
 
+function M.test(node)
+  local up = M.get_scope_of_definition(node, 0)
+  line_begin, column_begin, line_end, column_end = ts_utils.get_node_range(up)
+  print(line_begin, line_end)
+end
 return M
 
 
