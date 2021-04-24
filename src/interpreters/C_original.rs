@@ -49,7 +49,7 @@ impl Interpreter for C_original {
             c_work_dir: rwd,
             bin_path: bp,
             main_file_path: mfp,
-            compiler: String::from("gcc"),
+            compiler: String::from("clang"),
             imports: vec![],
         })
     }

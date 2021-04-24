@@ -50,7 +50,7 @@ impl Interpreter for Cpp_original {
             c_work_dir: rwd,
             bin_path: bp,
             main_file_path: mfp,
-            compiler: String::from("g++"),
+            compiler: String::from("clang++"),
             imports: vec![],
         })
     }
